@@ -1,0 +1,1500 @@
+ <!DOCTYPE html>
+  <html lang="pt-BR">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>ORION PDV - Sistema de Ponto de Venda</title>
+      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+  <body>
+      <header class="main-header">
+          <div class="container">
+              <div class="logo">
+                  <h1>ORION PDV</h1>
+              </div>
+              <nav>
+                  <ul>
+                      <li><a href="#features">Recursos</a></li>
+                      <li><a href="#pricing">Preços</a></li>
+                      <li><a href="#about">Sobre</a></li>
+                      <li><a href="login.html" class="btn-primary">Entrar</a></li>
+                  </ul>
+              </nav>
+          </div>
+      </header>
+
+      <section class="hero">
+          <div class="container">
+              <div class="hero-content">
+                  <h2>Sistema de Ponto de Venda Completo</h2>
+                  <p>Gerencie seu negócio com facilidade e eficiência. Vendas, estoque, relatórios e muito mais.</p>
+                  <a href="login.html" class="btn-large">Começar Agora</a>
+              </div>
+              <div class="hero-image">
+                  <img src="img/logo.png" alt="ORION PDV">
+              </div>
+          </div>
+      </section>
+
+      <section id="features" class="features">
+          <div class="container">
+              <h2 class="section-title">Recursos</h2>
+              <div class="features-grid">
+                  <div class="feature-card">
+                      <i class="fas fa-cash-register"></i>
+                      <h3>Vendas Simplificadas</h3>
+                      <p>Interface intuitiva para processamento rápido de vendas com suporte a múltiplas formas de pagamento.</p>
+                  </div>
+                  <div class="feature-card">
+                      <i class="fas fa-box"></i>
+                      <h3>Controle de Estoque</h3>
+                      <p>Gerencie seu inventário com facilidade, receba alertas de estoque baixo e faça ajustes automáticos.</p>
+                  </div>
+                  <div class="feature-card">
+                      <i class="fas fa-chart-line"></i>
+                      <h3>Relatórios Detalhados</h3>
+                      <p>Analise seu negócio com relatórios de vendas, produtos mais vendidos e lucratividade.</p>
+                  </div>
+                  <div class="feature-card">
+                      <i class="fas fa-cloud"></i>
+                      <h3>Na Nuvem</h3>
+                      <p>Acesse de qualquer lugar com armazenamento seguro na nuvem e backup automático.</p>
+                  </div>
+              </div>
+          </div>
+      </section>
+
+      <footer>
+          <div class="container">
+              <p>&copy; 2025 ORION PDV - Todos os direitos reservados</p>
+          </div>
+      </footer>
+
+      <script src="js/app.js"></script>
+  </body>
+  </html>
+
+  login.html (Página de login)
+  <!DOCTYPE html>
+  <html lang="pt-BR">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Login - ORION PDV</title>
+      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+  <body class="login-page">
+      <div class="login-container">
+          <div class="login-header">
+              <h1>ORION PDV</h1>
+              <p>Sistema de Ponto de Venda</p>
+          </div>
+
+          <div id="error-message" class="error-message" style="display: none;"></div>
+
+          <form id="login-form" class="login-form">
+              <div class="form-group">
+                  <label for="username">Usuário:</label>
+                  <input type="text" id="username" name="username" required autofocus>
+              </div>
+
+              <div class="form-group">
+                  <label for="password">Senha:</label>
+                  <input type="password" id="password" name="password" required>
+              </div>
+
+              <button type="submit" class="btn-primary btn-large">Entrar</button>
+          </form>
+
+          <div class="login-footer">
+              <p>&copy; 2025 ORION PDV. Todos os direitos reservados.</p>
+          </div>
+      </div>
+
+      <script src="js/api.js"></script>
+      <script>
+          document.getElementById('login-form').addEventListener('submit', function(e) {
+              e.preventDefault();
+
+              const username = document.getElementById('username').value;
+              const password = document.getElementById('password').value;
+
+              // Chama a função de login da API
+              login(username, password)
+                  .then(response => {
+                      if (response.success) {
+                          // Armazena o token de autenticação
+                          localStorage.setItem('auth_token', response.token);
+                          localStorage.setItem('user_name', response.user.name);
+
+                          // Redireciona para o dashboard
+                          window.location.href = 'dashboard.html';
+                      } else {
+                          showError(response.message || 'Falha na autenticação');
+                      }
+                  })
+                  .catch(error => {
+                      showError('Erro ao conectar com o servidor');
+                      console.error(error);
+                  });
+          });
+
+          function showError(message) {
+              const errorElement = document.getElementById('error-message');
+              errorElement.textContent = message;
+              errorElement.style.display = 'block';
+          }
+      </script>
+  </body>
+  </html>
+
+  css/style.css (Estilos)
+  /* Estilos gerais */
+  :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --accent-color: #2ecc71;
+      --text-color: #333;
+      --light-color: #ecf0f1;
+      --dark-color: #2c3e50;
+      --danger-color: #e74c3c;
+      --warning-color: #f39c12;
+      --border-color: #ddd;
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+  }
+
+  body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: #f5f5f5;
+  }
+
+  a {
+      text-decoration: none;
+      color: var(--secondary-color);
+  }
+
+  .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+  }
+
+  .btn-primary {
+      display: inline-block;
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+  }
+
+  .btn-primary:hover {
+      background-color: #2980b9;
+  }
+
+  .btn-large {
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+  }
+
+  /* Header */
+  .main-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+  }
+
+  .main-header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+
+  .logo h1 {
+      font-size: 1.8rem;
+      margin: 0;
+  }
+
+  nav ul {
+      display: flex;
+      list-style: none;
+  }
+
+  nav li {
+      margin-left: 1.5rem;
+  }
+
+  nav a {
+      color: white;
+      transition: color 0.3s;
+  }
+
+  nav a:hover {
+      color: var(--secondary-color);
+  }
+
+  /* Hero Section */
+  .hero {
+      padding: 80px 0;
+      background: linear-gradient(to right, #2c3e50, #4ca1af);
+      color: white;
+  }
+
+  .hero .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  }
+
+  .hero-content {
+      flex: 1;
+      max-width: 600px;
+  }
+
+  .hero-content h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+  }
+
+  .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+  }
+
+  .hero-image {
+      flex: 1;
+      text-align: center;
+  }
+
+  .hero-image img {
+      max-width: 100%;
+      height: auto;
+  }
+
+  /* Features Section */
+  .features {
+      padding: 80px 0;
+      background-color: #fff;
+  }
+
+  .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+      font-size: 2rem;
+      color: var(--dark-color);
+  }
+
+  .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+  }
+
+  .feature-card {
+      text-align: center;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .feature-card i {
+      font-size: 3rem;
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+  }
+
+  .feature-card h3 {
+      margin-bottom: 15px;
+  }
+
+  /* Footer */
+  footer {
+      background-color: var(--dark-color);
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+  }
+
+  /* Login Page */
+  .login-page {
+      background: linear-gradient(to right, #2c3e50, #4ca1af);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .login-container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+  }
+
+  .login-header {
+      margin-bottom: 30px;
+  }
+
+  .login-header h1 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+  }
+
+  .error-message {
+      background-color: #fdedee;
+      color: var(--danger-color);
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+  }
+
+  .login-form {
+      text-align: left;
+  }
+
+  .form-group {
+      margin-bottom: 20px;
+  }
+
+  .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+  }
+
+  .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 1rem;
+  }
+
+  .login-form button {
+      width: 100%;
+      border: none;
+      cursor: pointer;
+  }
+
+  .login-footer {
+      margin-top: 30px;
+      font-size: 0.8rem;
+      color: #777;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+      .hero .container {
+          flex-direction: column;
+          text-align: center;
+      }
+
+      .hero-content {
+          margin-bottom: 40px;
+      }
+
+      nav ul {
+          display: none;
+      }
+  }
+
+  js/api.js (API para conectar ao PostgreSQL)
+  // URL base da API
+  const API_URL = 'https://seu-api-endpoint.render.com/api';
+
+  // Função para login
+  async function login(username, password) {
+      try {
+          const response = await fetch(`${API_URL}/auth/login`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ username, password })
+          });
+
+          return await response.json();
+      } catch (error) {
+          console.error('Erro no login:', error);
+          return {
+              success: false,
+              message: 'Erro ao conectar com o servidor'
+          };
+      }
+  }
+
+  // Função para obter produtos
+  async function getProducts() {
+      try {
+          const token = localStorage.getItem('auth_token');
+
+          const response = await fetch(`${API_URL}/products`, {
+              method: 'GET',
+              headers: {
+                  'Authorization': `Bearer ${token}`
+              }
+          });
+
+          return await response.json();
+      } catch (error) {
+          console.error('Erro ao buscar produtos:', error);
+          return {
+              success: false,
+              message: 'Erro ao buscar produtos'
+          };
+      }
+  }
+
+  // Função para buscar produtos
+  async function searchProducts(query) {
+      try {
+          const token = localStorage.getItem('auth_token');
+
+          const response = await fetch(`${API_URL}/products/search?query=${encodeURIComponent(query)}`, {
+              method: 'GET',
+              headers: {
+                  'Authorization': `Bearer ${token}`
+              }
+          });
+
+          return await response.json();
+      } catch (error) {
+          console.error('Erro na busca:', error);
+          return {
+              success: false,
+              message: 'Erro ao buscar produtos'
+          };
+      }
+  }
+
+  // Função para processar uma venda
+  async function processSale(saleData) {
+      try {
+          const token = localStorage.getItem('auth_token');
+
+          const response = await fetch(`${API_URL}/sales`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify(saleData)
+          });
+
+          return await response.json();
+      } catch (error) {
+          console.error('Erro ao processar venda:', error);
+          return {
+              success: false,
+              message: 'Erro ao processar venda'
+          };
+      }
+  }
+
+  // Verificar se o usuário está autenticado
+  function isAuthenticated() {
+      return localStorage.getItem('auth_token') !== null;
+  }
+
+  // Função para logout
+  function logout() {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user_name');
+      window.location.href = 'login.html';
+  }
+
+  api/app.py (Backend API para PostgreSQL)
+  from flask import Flask, request, jsonify
+  import os
+  import psycopg2
+  import psycopg2.extras
+  import jwt
+  import datetime
+  from werkzeug.security import check_password_hash
+  from functools import wraps
+  from flask_cors import CORS
+
+  app = Flask(__name__)
+  CORS(app)
+
+  # Configurações
+  app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'orion_pdv_secret')
+  app.config['DB_HOST'] = os.environ.get('DB_HOST', '34.95.140.152')
+  app.config['DB_USER'] = os.environ.get('DB_USER', 'orion_app')
+  app.config['DB_PASSWORD'] = os.environ.get('DB_PASSWORD', '123456')
+  app.config['DB_NAME'] = os.environ.get('DB_NAME', 'orion_pdv')
+  app.config['DB_PORT'] = os.environ.get('DB_PORT', '5432')
+
+  # Conexão com o PostgreSQL
+  def get_db_connection():
+      conn = psycopg2.connect(
+          host=app.config['DB_HOST'],
+          database=app.config['DB_NAME'],
+          user=app.config['DB_USER'],
+          password=app.config['DB_PASSWORD'],
+          port=app.config['DB_PORT']
+      )
+      conn.autocommit = True
+      return conn
+
+  # Middleware para verificar token JWT
+  def token_required(f):
+      @wraps(f)
+      def decorated(*args, **kwargs):
+          token = None
+
+          if 'Authorization' in request.headers:
+              token = request.headers['Authorization'].split(" ")[1]
+
+          if not token:
+              return jsonify({'success': False, 'message': 'Token ausente'}), 401
+
+          try:
+              data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+              current_user = data['user_id']
+          except:
+              return jsonify({'success': False, 'message': 'Token inválido'}), 401
+
+          return f(current_user, *args, **kwargs)
+
+      return decorated
+
+  # Rota de autenticação
+  @app.route('/api/auth/login', methods=['POST'])
+  def login():
+      auth = request.json
+
+      if not auth or not auth.get('username') or not auth.get('password'):
+          return jsonify({'success': False, 'message': 'Dados de login incompletos'}), 401
+
+      try:
+          conn = get_db_connection()
+          cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+          cur.execute('SELECT * FROM usuarios WHERE username = %s', (auth.get('username'),))
+          user = cur.fetchone()
+
+          if not user:
+              return jsonify({'success': False, 'message': 'Usuário não encontrado'}), 401
+
+          # Em produção, use compare hash em vez de comparação direta
+          if user['password'] == auth.get('password'):
+              token = jwt.encode({
+                  'user_id': user['id'],
+                  'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+              }, app.config['SECRET_KEY'])
+
+              return jsonify({
+                  'success': True,
+                  'token': token,
+                  'user': {
+                      'id': user['id'],
+                      'name': user['nome'],
+                      'role': user['role']
+                  }
+              })
+
+          return jsonify({'success': False, 'message': 'Senha incorreta'}), 401
+
+      except Exception as e:
+          print(f"Erro de login: {e}")
+          return jsonify({'success': False, 'message': 'Erro no servidor'}), 500
+      finally:
+          if cur:
+              cur.close()
+          if conn:
+              conn.close()
+
+  # Rota para buscar produtos
+  @app.route('/api/products', methods=['GET'])
+  @token_required
+  def get_products(current_user):
+      try:
+          conn = get_db_connection()
+          cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+          cur.execute('SELECT * FROM produtos ORDER BY nome')
+          products = cur.fetchall()
+
+          return jsonify({
+              'success': True,
+              'products': products
+          })
+
+      except Exception as e:
+          print(f"Erro ao buscar produtos: {e}")
+          return jsonify({'success': False, 'message': 'Erro ao buscar produtos'}), 500
+      finally:
+          if cur:
+              cur.close()
+          if conn:
+              conn.close()
+
+  # Rota para buscar produtos com pesquisa
+  @app.route('/api/products/search', methods=['GET'])
+  @token_required
+  def search_products(current_user):
+      query = request.args.get('query', '')
+
+      try:
+          conn = get_db_connection()
+          cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+          search_pattern = f"%{query}%"
+          cur.execute(
+              'SELECT * FROM produtos WHERE nome ILIKE %s OR codigo_barras ILIKE %s ORDER BY nome',
+              (search_pattern, search_pattern)
+          )
+          products = cur.fetchall()
+
+          return jsonify({
+              'success': True,
+              'products': products
+          })
+
+      except Exception as e:
+          print(f"Erro na busca de produtos: {e}")
+          return jsonify({'success': False, 'message': 'Erro na busca de produtos'}), 500
+      finally:
+          if cur:
+              cur.close()
+          if conn:
+              conn.close()
+
+  # Rota para processar uma venda
+  @app.route('/api/sales', methods=['POST'])
+  @token_required
+  def process_sale(current_user):
+      data = request.json
+
+      if not data or not data.get('items'):
+          return jsonify({'success': False, 'message': 'Dados incompletos'}), 400
+
+      try:
+          conn = get_db_connection()
+          cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+          # Inicia uma transação
+          conn.autocommit = False
+
+          # Cria a venda
+          cur.execute(
+              """
+              INSERT INTO vendas (data, usuario, cliente_id, status, forma_pagamento, valor_total)
+              VALUES (NOW(), %s, %s, 'FINALIZADA', %s, %s)
+              RETURNING id
+              """,
+              (
+                  current_user,
+                  data.get('customer_id'),
+                  data.get('payment_method', 'DINHEIRO'),
+                  data.get('total', 0)
+              )
+          )
+
+          sale_id = cur.fetchone()['id']
+
+          # Adiciona os itens
+          for item in data.get('items', []):
+              # Verifica estoque
+              cur.execute(
+                  "SELECT estoque, preco_venda FROM produtos WHERE id = %s",
+                  (item['product_id'],)
+              )
+              product = cur.fetchone()
+
+              if not product:
+                  conn.rollback()
+                  return jsonify({'success': False, 'message': f'Produto ID {item["product_id"]} não encontrado'}), 400
+
+              if product['estoque'] < item['quantity']:
+                  conn.rollback()
+                  return jsonify({'success': False, 'message': f'Estoque insuficiente para o produto ID {item["product_id"]}'}), 400
+
+              # Adiciona o item à venda
+              cur.execute(
+                  """
+                  INSERT INTO itens_venda (venda_id, produto_id, quantidade, preco_unitario, subtotal)
+                  VALUES (%s, %s, %s, %s, %s)
+                  """,
+                  (
+                      sale_id,
+                      item['product_id'],
+                      item['quantity'],
+                      product['preco_venda'],
+                      product['preco_venda'] * item['quantity']
+                  )
+              )
+
+              # Atualiza estoque
+              cur.execute(
+                  "UPDATE produtos SET estoque = estoque - %s WHERE id = %s",
+                  (item['quantity'], item['product_id'])
+              )
+
+              # Registra movimentação
+              cur.execute(
+                  """
+                  INSERT INTO movimentacoes (produto_id, quantidade, tipo, data)
+                  VALUES (%s, %s, 'VENDA', NOW())
+                  """,
+                  (item['product_id'], -item['quantity'])
+              )
+
+          # Commit da transação
+          conn.commit()
+
+          return jsonify({
+              'success': True,
+              'sale_id': sale_id,
+              'message': 'Venda processada com sucesso'
+          })
+
+      except Exception as e:
+          if conn:
+              conn.rollback()
+          print(f"Erro ao processar venda: {e}")
+          return jsonify({'success': False, 'message': 'Erro ao processar venda'}), 500
+      finally:
+          if conn:
+              conn.autocommit = True
+
+          if cur:
+              cur.close()
+          if conn:
+              conn.close()
+
+  # Rota para verificar status
+  @app.route('/api/status', methods=['GET'])
+  def status():
+      try:
+          conn = get_db_connection()
+          cur = conn.cursor()
+          cur.execute('SELECT 1')
+
+          return jsonify({
+              'success': True,
+              'status': 'online',
+              'database': 'connected',
+              'timestamp': datetime.datetime.now().isoformat()
+          })
+      except Exception as e:
+          return jsonify({
+              'success': False,
+              'status': 'online',
+              'database': 'error',
+              'error': str(e),
+              'timestamp': datetime.datetime.now().isoformat()
+          }), 500
+      finally:
+          if cur:
+              cur.close()
+          if conn:
+              conn.close()
+
+  if __name__ == '__main__':
+      port = int(os.environ.get('PORT', 8080))
+      app.run(host='0.0.0.0', port=port)
+
+  api/requirements.txt
+  flask>=2.0.1
+  psycopg2-binary>=2.9.3
+  gunicorn>=20.1.0
+  pyjwt>=2.1.0
+  flask-cors>=3.0.10
+
+  render.yaml (Configuração para deploy no Render)
+  services:
+    # Frontend estático
+    - type: web
+      name: orion-pdv-frontend
+      env: static
+      buildCommand: echo "Nothing to build"
+      staticPublishPath: ./
+      routes:
+        - type: rewrite
+          source: /*
+          destination: /index.html
+      headers:
+        - path: /*
+          name: Cache-Control
+          value: no-cache
+
+    # Backend API
+    - type: web
+      name: orion-pdv-api
+      env: python
+      buildCommand: pip install -r api/requirements.txt
+      startCommand: cd api && gunicorn app:app
+      envVars:
+        - key: DB_HOST
+          value: 34.95.140.152
+        - key: DB_USER
+          value: orion_app
+        - key: DB_PASSWORD
+          value: 123456
+        - key: DB_NAME
+          value: orion_pdv
+        - key: DB_PORT
+          value: 5432
+        - key: SECRET_KEY
+          generateValue: true
+
+  3. Como fazer o deploy no Render
+
+  1. Crie uma conta no Render se ainda não tiver: https://render.com/
+  2. Instale o CLI do Render (opcional):
+  npm install -g @render/cli
+  3. Faça login:
+  render login
+  4. Deploy via render.yaml:
+  render blueprint apply
+
+  Ou simplesmente:
+
+  1. Faça login no https://dashboard.render.com
+  2. Vá para "Blueprints" ou "New" → "Blueprint"
+  3. Conecte seu repositório Git ou faça upload do diretório
+  4. Selecione o render.yaml ou configure manualmente:
+    - Um Static Site para o frontend
+    - Um Web Service para a API
+
+  Com isso, você terá:
+  - Um site estático para o frontend do PDV ORION
+  - Uma API backend que se conecta ao seu banco PostgreSQL existente
+  - Tudo hospedado e gerenciado no Render!
+
+> le o sanbar le ocode bar tudo certinho...
+
+● Entendido! Vou adicionar leitura de código de barras ao seu sistema PDV ORION. Essa é uma funcionalidade crucial que vai acelerar o processo
+  de vendas.
+
+  Aqui está a implementação:
+
+  Adicionar Leitura de Código de Barras ao PDV ORION
+
+  Vamos modificar o arquivo dashboard.html (a tela principal do PDV) para incluir a leitura de código de barras:
+
+  <!DOCTYPE html>
+  <html lang="pt-BR">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>ORION PDV - Dashboard</title>
+      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <!-- QuaggaJS para leitura de código de barras -->
+      <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+  </head>
+  <body class="dashboard-page">
+      <header class="dashboard-header">
+          <div class="container">
+              <div class="logo">
+                  <h1>ORION PDV</h1>
+              </div>
+              <div class="user-info">
+                  <span id="user-name">Usuário</span>
+                  <button id="logout-btn" class="btn-logout">
+                      <i class="fas fa-sign-out-alt"></i> Sair
+                  </button>
+              </div>
+          </div>
+      </header>
+
+      <div class="dashboard-container">
+          <!-- Barra lateral com menu -->
+          <aside class="sidebar">
+              <nav class="sidebar-nav">
+                  <ul>
+                      <li class="active" data-view="pos-view">
+                          <i class="fas fa-cash-register"></i> Vendas
+                      </li>
+                      <li data-view="products-view">
+                          <i class="fas fa-boxes"></i> Produtos
+                      </li>
+                      <li data-view="reports-view">
+                          <i class="fas fa-chart-bar"></i> Relatórios
+                      </li>
+                      <li data-view="settings-view">
+                          <i class="fas fa-cog"></i> Configurações
+                      </li>
+                  </ul>
+              </nav>
+          </aside>
+
+          <!-- Conteúdo principal -->
+          <main class="main-content">
+              <!-- Tela de PDV -->
+              <section id="pos-view" class="dashboard-view active">
+                  <div class="pos-header">
+                      <h2>Ponto de Venda</h2>
+                      <div class="pos-actions">
+                          <button id="barcode-scanner-btn" class="btn-secondary">
+                              <i class="fas fa-barcode"></i> Scanner
+                          </button>
+                          <button id="clear-sale-btn" class="btn-danger">
+                              <i class="fas fa-trash"></i> Limpar
+                          </button>
+                      </div>
+                  </div>
+
+                  <div class="pos-container">
+                      <!-- Produtos -->
+                      <div class="products-panel">
+                          <div class="search-bar">
+                              <input type="text" id="product-search" placeholder="Buscar produto ou ler código de barras...">
+                              <button id="search-btn">
+                                  <i class="fas fa-search"></i>
+                              </button>
+                          </div>
+                          <div id="scanner-container" style="display:none;">
+                              <div id="interactive" class="viewport"></div>
+                              <button id="close-scanner" class="btn-secondary">Fechar Scanner</button>
+                          </div>
+                          <div id="products-list" class="products-list">
+                              <!-- Produtos serão carregados aqui -->
+                          </div>
+                      </div>
+
+                      <!-- Carrinho de compras -->
+                      <div class="cart-panel">
+                          <h3>Itens da Venda</h3>
+                          <div id="cart-items" class="cart-items">
+                              <!-- Itens do carrinho serão carregados aqui -->
+                              <div class="empty-cart">Nenhum item adicionado</div>
+                          </div>
+                          <div class="cart-summary">
+                              <div class="cart-total">
+                                  <span>Total:</span>
+                                  <span id="cart-total">R$ 0,00</span>
+                              </div>
+                              <div class="cart-actions">
+                                  <button id="checkout-btn" class="btn-primary btn-large" disabled>
+                                      <i class="fas fa-check"></i> Finalizar Venda
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Modal de Pagamento -->
+                  <div id="payment-modal" class="modal">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h3>Finalizar Venda</h3>
+                              <span class="close-modal">&times;</span>
+                          </div>
+                          <div class="modal-body">
+                              <div class="form-group">
+                                  <label>Total:</label>
+                                  <h2 id="modal-total">R$ 0,00</h2>
+                              </div>
+                              <div class="form-group">
+                                  <label for="payment-method">Forma de Pagamento:</label>
+                                  <select id="payment-method" class="form-control">
+                                      <option value="DINHEIRO">Dinheiro</option>
+                                      <option value="CARTAO_CREDITO">Cartão de Crédito</option>
+                                      <option value="CARTAO_DEBITO">Cartão de Débito</option>
+                                      <option value="PIX">PIX</option>
+                                  </select>
+                              </div>
+                              <div class="form-group">
+                                  <label for="customer-id">Cliente (opcional):</label>
+                                  <select id="customer-id" class="form-control">
+                                      <option value="">Selecione um cliente</option>
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                              <button id="cancel-payment" class="btn-secondary">Cancelar</button>
+                              <button id="confirm-payment" class="btn-primary">Confirmar</button>
+                          </div>
+                      </div>
+                  </div>
+              </section>
+
+              <!-- Outras telas serão adicionadas aqui -->
+              <section id="products-view" class="dashboard-view">
+                  <h2>Produtos</h2>
+                  <p>Gerenciamento de produtos</p>
+              </section>
+
+              <section id="reports-view" class="dashboard-view">
+                  <h2>Relatórios</h2>
+                  <p>Relatórios de vendas</p>
+              </section>
+
+              <section id="settings-view" class="dashboard-view">
+                  <h2>Configurações</h2>
+                  <p>Configurações do sistema</p>
+              </section>
+          </main>
+      </div>
+
+      <script src="js/api.js"></script>
+      <script src="js/barcode-scanner.js"></script>
+      <script src="js/pos.js"></script>
+      <script>
+          // Verificar autenticação
+          if (!isAuthenticated()) {
+              window.location.href = 'login.html';
+          }
+
+          // Exibir nome do usuário
+          document.getElementById('user-name').textContent = localStorage.getItem('user_name') || 'Usuário';
+
+          // Logout
+          document.getElementById('logout-btn').addEventListener('click', logout);
+
+          // Navegação entre telas
+          document.querySelectorAll('.sidebar-nav li').forEach(item => {
+              item.addEventListener('click', function() {
+                  // Remover classe active de todos
+                  document.querySelectorAll('.sidebar-nav li').forEach(li => li.classList.remove('active'));
+                  // Adicionar classe active ao item clicado
+                  this.classList.add('active');
+
+                  // Mostrar a tela correspondente
+                  const viewId = this.getAttribute('data-view');
+                  document.querySelectorAll('.dashboard-view').forEach(view => {
+                      view.classList.remove('active');
+                  });
+                  document.getElementById(viewId).classList.add('active');
+              });
+          });
+      </script>
+  </body>
+  </html>
+
+  Agora vamos criar o arquivo js/barcode-scanner.js para implementar a leitura de código de barras:
+
+  // Configurações do scanner de código de barras
+  const barcodeConfig = {
+      inputStream: {
+          name: "Live",
+          type: "LiveStream",
+          target: document.querySelector("#interactive"),
+          constraints: {
+              width: { min: 640 },
+              height: { min: 480 },
+              facingMode: "environment"
+          },
+      },
+      locator: {
+          patchSize: "medium",
+          halfSample: true
+      },
+      numOfWorkers: navigator.hardwareConcurrency || 2,
+      frequency: 10,
+      decoder: {
+          readers: [
+              "code_128_reader",
+              "ean_reader",
+              "ean_8_reader",
+              "code_39_reader",
+              "code_39_vin_reader",
+              "codabar_reader",
+              "upc_reader",
+              "upc_e_reader",
+              "i2of5_reader"
+          ]
+      },
+      locate: true
+  };
+
+  // Inicializa o scanner
+  function initBarcodeScanner() {
+      Quagga.init(barcodeConfig, function(err) {
+          if (err) {
+              console.error("Erro ao iniciar o scanner:", err);
+              alert("Não foi possível acessar a câmera. Verifique as permissões.");
+              return;
+          }
+          Quagga.start();
+      });
+
+      // Evento para detectar código de barras
+      Quagga.onDetected(function(result) {
+          const code = result.codeResult.code;
+          console.log("Código de barras detectado:", code);
+
+          // Tocar som de beep
+          const beep = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2Ec
+  Bj+a2/LDciUFLHOw8uuwRwURRoXO8tiJKwpBdPL9/7JBBiBYw/f7/scqFglHpvv/9NJ6HQMvab39/+2dKAsEMn3g/v/zsz4LCDWH7P7/8J8kDRE+lvDr9tORLRohWLDo3taqTSU1WZbayr
+  6MVFxleqCkmo2NgY+apZ+JbF1qiLTLvZFUNUyR1ezNgjgZMHnN+OF8FQssjenw56cuFyF8y9rRpE04RHm74dCiWDhEa6/Wy7KETjxQgMbRu6BIETR3ttfRwJJJLlCe0vnoyHwdHz+r4vj5
+  w1kMFzOa2PXvtE0PO47n/P/LXBUQQncQAFUQAVYRAFUQAFYRAAEAAwABAAMAAwABAAEAAwABAAEAAQADAAEAAwABAAEAAQABAAEAAQABAAEAAQABAAEAAQBkYXRhPAUAAPLz9vn3/P3/AQ
+  IEBgcJCgsMDQ0ODQ0MDAsKCQgHBgUFBAMCAQEAAAD//v38+/r5+Pf29fTz8vHx8O/u7e3s6+vq6eno6Ofn5+fn5+fo6Onp6uvs7e7v8PHy8/T19vf4+fr7/P3+//8AAQIDBAUGBggJCQoL
+  DAwNDQ4ODg4ODQ0MDAsKCgkIBwYFBAMCAQD///79/Pv6+fj39vX08/Lx8O/u7e3s6+rq6eno5+fm5ubl5eXl5ebm5ufo6Onq6+zt7u/w8fLz9PX29/j5+vv8/f7///8BAgMEBQYHCAkKCg
+  sLDA0NDg4ODg4ODQ0MCwoKCQgHBgUEAwIBAP///v38+/r5+Pf29fTz8vHw7+7t7Ovr6uno6Ofn5ubm5eXl5eXl5ebm5+fo6Onq6+zt7u/w8fLz9PX29/j5+vv8/f3+/wABAgMEBQYHCAkJ
+  CgoLDAwNDQ0ODg4ODQwMCwsKCQgIBwYFBAMCAQEAAP/+/fz7+vn49/b19PPy8fDv7u3s7Ovq6eno5+fm5uXl5eXk5OXl5ebm5+jn6Onq6+zt7u/w8fLz9PX29/j5+vv7/P3+//8AAQIDBA
+  UGBwgICQoKCwsMDA0NDQ0NDQ0MDAsLCgkJCAgHBgUEAwMCAQD//v79/Pv6+fj39vX08/Ly8fDv7u3t7Ovq6eno5+fm5uXl5OTk5OTk5eXl5ufn6Ojp6uvs7e7v8PHx8vP09fb3+Pn6+/v8
+  /f7+/wABAgMDBAUGBwcICQoKCwsMDAwNDQ0NDQ0MDAwLCwoKCQgIBwcGBQQEAwIBAQD//v79/Pv6+fj39vb18/Py8fDv7u7t7Ovr6uno6Ofm5uXl5OTj4+Pk5OTl5ebm5+fo6erq6+zt7e
+  7v8PHx8vP09fb2+Pn5+vv8/f3+/v8AAQECAwQEBQYHBwgJCQoKCwsMDAwMDQ0NDAwMDAsLCgoJCQgHBwYFBAQDAgEBAP//CF9JUyAnVU5BTUUgLWEn");
+          beep.play();
+
+          // Fechar scanner
+          closeScanner();
+
+          // Buscar produto pelo código de barras
+          document.getElementById('product-search').value = code;
+          searchProductByBarcode(code);
+      });
+  }
+
+  // Buscar produto pelo código de barras
+  function searchProductByBarcode(barcode) {
+      // Mostrar feedback visual
+      const searchInput = document.getElementById('product-search');
+      searchInput.classList.add('barcode-scanned');
+
+      // Usar a API para buscar o produto
+      searchProducts(barcode)
+          .then(response => {
+              if (response.success && response.products && response.products.length > 0) {
+                  // Pegar o primeiro produto que corresponde ao código de barras
+                  const product = response.products.find(p => p.codigo_barras === barcode) || response.products[0];
+
+                  // Adicionar o produto ao carrinho automaticamente
+                  addToCart(product);
+
+                  // Limpar a busca depois de um momento
+                  setTimeout(() => {
+                      searchInput.value = '';
+                      searchInput.classList.remove('barcode-scanned');
+                  }, 1500);
+              } else {
+                  // Produto não encontrado
+                  searchInput.classList.add('barcode-not-found');
+                  alert('Produto não encontrado para o código: ' + barcode);
+
+                  setTimeout(() => {
+                      searchInput.classList.remove('barcode-scanned');
+                      searchInput.classList.remove('barcode-not-found');
+                  }, 1500);
+              }
+          })
+          .catch(error => {
+              console.error('Erro ao buscar produto:', error);
+              searchInput.classList.remove('barcode-scanned');
+          });
+  }
+
+  // Abrir scanner
+  function openScanner() {
+      const scannerContainer = document.getElementById('scanner-container');
+      scannerContainer.style.display = 'block';
+      initBarcodeScanner();
+  }
+
+  // Fechar scanner
+  function closeScanner() {
+      Quagga.stop();
+      const scannerContainer = document.getElementById('scanner-container');
+      scannerContainer.style.display = 'none';
+  }
+
+  // Inicializar quando o documento estiver pronto
+  document.addEventListener('DOMContentLoaded', function() {
+      // Botão para abrir scanner
+      const scannerBtn = document.getElementById('barcode-scanner-btn');
+      if (scannerBtn) {
+          scannerBtn.addEventListener('click', openScanner);
+      }
+
+      // Botão para fechar scanner
+      const closeBtn = document.getElementById('close-scanner');
+      if (closeBtn) {
+          closeBtn.addEventListener('click', closeScanner);
+      }
+
+      // Também podemos detectar códigos de barras do input de busca
+      const searchInput = document.getElementById('product-search');
+      if (searchInput) {
+          searchInput.addEventListener('keypress', function(e) {
+              // Se pressionar Enter e o valor tiver pelo menos 8 caracteres (possível código de barras)
+              if (e.key === 'Enter' && this.value.length >= 8) {
+                  searchProductByBarcode(this.value);
+              }
+          });
+      }
+  });
+
+  Agora vamos adicionar alguns estilos específicos para o scanner de código de barras no arquivo css/style.css:
+
+  /* Estilos para o scanner de código de barras */
+  #scanner-container {
+      position: relative;
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto 20px;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+  }
+
+  #interactive.viewport {
+      width: 100%;
+      height: 0;
+      padding-bottom: 75%; /* Proporção 4:3 */
+      position: relative;
+  }
+
+  #interactive.viewport canvas,
+  #interactive.viewport video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+  }
+
+  #close-scanner {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.7);
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+  }
+
+  .barcode-scanned {
+      background-color: #d4edda !important;
+      border-color: #c3e6cb !important;
+      animation: pulse-green 1.5s;
+  }
+
+  .barcode-not-found {
+      background-color: #f8d7da !important;
+      border-color: #f5c6cb !important;
+      animation: pulse-red 1.5s;
+  }
+
+  @keyframes pulse-green {
+      0% {
+          box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+      }
+      70% {
+          box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+      }
+      100% {
+          box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+      }
+  }
+
+  @keyframes pulse-red {
+      0% {
+          box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+      }
+      70% {
+          box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+      }
+      100% {
+          box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+      }
+  }
+
+  /* Estilos específicos para tela de dashboard e PDV */
+  .dashboard-page {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: #f5f5f5;
+  }
+
+  .dashboard-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.75rem 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .dashboard-header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+
+  .dashboard-container {
+      display: flex;
+      flex: 1;
+  }
+
+  .sidebar {
+      width: 220px;
+      background-color: #34495e;
+      color: white;
+      padding-top: 20px;
+  }
+
+  .sidebar-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+  }
+
+  .sidebar-nav li {
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+  }
+
+  .sidebar-nav li:hover {
+      background-color: #2c3e50;
+  }
+
+  .sidebar-nav li.active {
+      background-color: var(--secondary-color);
+      font-weight: bold;
+  }
+
+  .sidebar-nav li i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+  }
+
+  .main-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+  }
+
+  .dashboard-view {
+      display: none;
+  }
+
+  .dashboard-view.active {
+      display: block;
+  }
+
+  .pos-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+  }
+
+  .pos-actions {
+      display: flex;
+      gap: 10px;
+  }
+
+  .pos-container {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 20px;
+      height: calc(100vh - 180px);
+  }
+
+  .products-panel, .cart-panel {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+  }
+
+  .products-list {
+      flex: 1;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 15px;
+      padding: 10px 0;
+  }
+
+  .product-item {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .product-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  .product-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+  }
+
+  .product-price {
+      color: var(--secondary-color);
+      font-weight: bold;
+  }
+
+  .product-stock {
+      font-size: 0.8rem;
+      color: #777;
+  }
+
+  .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 15px;
+  }
+
+  .cart-item {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid var(--border-color);
+  }
+
+  .empty-cart {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+  }
+
+  .btn-logout {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+  }
+
+  .btn-logout:hover {
+      text-decoration: underline;
+  }
