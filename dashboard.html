@@ -1,0 +1,600 @@
+
+  <!DOCTYPE html>
+  <html lang="pt-BR">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>ORION PDV - Dashboard</title>
+      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <!-- QuaggaJS para leitura de código de barras -->
+      <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+  </head>
+  <body class="dashboard-page">
+      <header class="dashboard-header">
+          <div class="container">
+              <div class="logo">
+                  <h1>ORION PDV</h1>
+              </div>
+              <div class="user-info">
+                  <span id="user-name">Usuário</span>
+                  <button id="logout-btn" class="btn-logout">
+                      <i class="fas fa-sign-out-alt"></i> Sair
+                  </button>
+              </div>
+          </div>
+      </header>
+
+      <div class="dashboard-container">
+          <!-- Barra lateral com menu -->
+          <aside class="sidebar">
+              <nav class="sidebar-nav">
+                  <ul>
+                      <li class="active" data-view="pos-view">
+                          <i class="fas fa-cash-register"></i> Vendas
+                      </li>
+                      <li data-view="products-view">
+                          <i class="fas fa-boxes"></i> Produtos
+                      </li>
+                      <li data-view="reports-view">
+                          <i class="fas fa-chart-bar"></i> Relatórios
+                      </li>
+                      <li data-view="settings-view">
+                          <i class="fas fa-cog"></i> Configurações
+                      </li>
+                  </ul>
+              </nav>
+          </aside>
+
+          <!-- Conteúdo principal -->
+          <main class="main-content">
+              <!-- Tela de PDV -->
+              <section id="pos-view" class="dashboard-view active">
+                  <div class="pos-header">
+                      <h2>Ponto de Venda</h2>
+                      <div class="pos-actions">
+                          <button id="barcode-scanner-btn" class="btn-secondary">
+                              <i class="fas fa-barcode"></i> Scanner
+                          </button>
+                          <button id="clear-sale-btn" class="btn-danger">
+                              <i class="fas fa-trash"></i> Limpar
+                          </button>
+                      </div>
+                  </div>
+
+                  <div class="pos-container">
+                      <!-- Produtos -->
+                      <div class="products-panel">
+                          <div class="search-bar">
+                              <input type="text" id="product-search" placeholder="Buscar produto ou ler código de barras...">
+                              <button id="search-btn">
+                                  <i class="fas fa-search"></i>
+                              </button>
+                          </div>
+                          <div id="scanner-container" style="display:none;">
+                              <div id="interactive" class="viewport"></div>
+                              <button id="close-scanner" class="btn-secondary">Fechar Scanner</button>
+                          </div>
+                          <div id="products-list" class="products-list">
+                              <!-- Produtos serão carregados aqui -->
+                          </div>
+                      </div>
+
+                      <!-- Carrinho de compras -->
+                      <div class="cart-panel">
+                          <h3>Itens da Venda</h3>
+                          <div id="cart-items" class="cart-items">
+                              <!-- Itens do carrinho serão carregados aqui -->
+                              <div class="empty-cart">Nenhum item adicionado</div>
+                          </div>
+                          <div class="cart-summary">
+                              <div class="cart-total">
+                                  <span>Total:</span>
+                                  <span id="cart-total">R$ 0,00</span>
+                              </div>
+                              <div class="cart-actions">
+                                  <button id="checkout-btn" class="btn-primary btn-large" disabled>
+                                      <i class="fas fa-check"></i> Finalizar Venda
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Modal de Pagamento -->
+                  <div id="payment-modal" class="modal">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h3>Finalizar Venda</h3>
+                              <span class="close-modal">&times;</span>
+                          </div>
+                          <div class="modal-body">
+                              <div class="form-group">
+                                  <label>Total:</label>
+                                  <h2 id="modal-total">R$ 0,00</h2>
+                              </div>
+                              <div class="form-group">
+                                  <label for="payment-method">Forma de Pagamento:</label>
+                                  <select id="payment-method" class="form-control">
+                                      <option value="DINHEIRO">Dinheiro</option>
+                                      <option value="CARTAO_CREDITO">Cartão de Crédito</option>
+                                      <option value="CARTAO_DEBITO">Cartão de Débito</option>
+                                      <option value="PIX">PIX</option>
+                                  </select>
+                              </div>
+                              <div class="form-group">
+                                  <label for="customer-id">Cliente (opcional):</label>
+                                  <select id="customer-id" class="form-control">
+                                      <option value="">Selecione um cliente</option>
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                              <button id="cancel-payment" class="btn-secondary">Cancelar</button>
+                              <button id="confirm-payment" class="btn-primary">Confirmar</button>
+                          </div>
+                      </div>
+                  </div>
+              </section>
+
+              <!-- Outras telas serão adicionadas aqui -->
+              <section id="products-view" class="dashboard-view">
+                  <h2>Produtos</h2>
+                  <p>Gerenciamento de produtos</p>
+              </section>
+
+              <section id="reports-view" class="dashboard-view">
+                  <h2>Relatórios</h2>
+                  <p>Relatórios de vendas</p>
+              </section>
+
+              <section id="settings-view" class="dashboard-view">
+                  <h2>Configurações</h2>
+                  <p>Configurações do sistema</p>
+              </section>
+          </main>
+      </div>
+
+      <script src="js/api.js"></script>
+      <script src="js/barcode-scanner.js"></script>
+      <script src="js/pos.js"></script>
+      <script>
+          // Verificar autenticação
+          if (!isAuthenticated()) {
+              window.location.href = 'login.html';
+          }
+
+          // Exibir nome do usuário
+          document.getElementById('user-name').textContent = localStorage.getItem('user_name') || 'Usuário';
+
+          // Logout
+          document.getElementById('logout-btn').addEventListener('click', logout);
+
+          // Navegação entre telas
+          document.querySelectorAll('.sidebar-nav li').forEach(item => {
+              item.addEventListener('click', function() {
+                  // Remover classe active de todos
+                  document.querySelectorAll('.sidebar-nav li').forEach(li => li.classList.remove('active'));
+                  // Adicionar classe active ao item clicado
+                  this.classList.add('active');
+
+                  // Mostrar a tela correspondente
+                  const viewId = this.getAttribute('data-view');
+                  document.querySelectorAll('.dashboard-view').forEach(view => {
+                      view.classList.remove('active');
+                  });
+                  document.getElementById(viewId).classList.add('active');
+              });
+          });
+      </script>
+  </body>
+  </html>
+
+  Agora vamos criar o arquivo js/barcode-scanner.js para implementar a leitura de código de barras:
+
+  // Configurações do scanner de código de barras
+  const barcodeConfig = {
+      inputStream: {
+          name: "Live",
+          type: "LiveStream",
+          target: document.querySelector("#interactive"),
+          constraints: {
+              width: { min: 640 },
+              height: { min: 480 },
+              facingMode: "environment"
+          },
+      },
+      locator: {
+          patchSize: "medium",
+          halfSample: true
+      },
+      numOfWorkers: navigator.hardwareConcurrency || 2,
+      frequency: 10,
+      decoder: {
+          readers: [
+              "code_128_reader",
+              "ean_reader",
+              "ean_8_reader",
+              "code_39_reader",
+              "code_39_vin_reader",
+              "codabar_reader",
+              "upc_reader",
+              "upc_e_reader",
+              "i2of5_reader"
+          ]
+      },
+      locate: true
+  };
+
+  // Inicializa o scanner
+  function initBarcodeScanner() {
+      Quagga.init(barcodeConfig, function(err) {
+          if (err) {
+              console.error("Erro ao iniciar o scanner:", err);
+              alert("Não foi possível acessar a câmera. Verifique as permissões.");
+              return;
+          }
+          Quagga.start();
+      });
+
+      // Evento para detectar código de barras
+      Quagga.onDetected(function(result) {
+          const code = result.codeResult.code;
+          console.log("Código de barras detectado:", code);
+
+          // Tocar som de beep
+          const beep = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2Ec
+  Bj+a2/LDciUFLHOw8uuwRwURRoXO8tiJKwpBdPL9/7JBBiBYw/f7/scqFglHpvv/9NJ6HQMvab39/+2dKAsEMn3g/v/zsz4LCDWH7P7/8J8kDRE+lvDr9tORLRohWLDo3taqTSU1WZbayr
+  6MVFxleqCkmo2NgY+apZ+JbF1qiLTLvZFUNUyR1ezNgjgZMHnN+OF8FQssjenw56cuFyF8y9rRpE04RHm74dCiWDhEa6/Wy7KETjxQgMbRu6BIETR3ttfRwJJJLlCe0vnoyHwdHz+r4vj5
+  w1kMFzOa2PXvtE0PO47n/P/LXBUQQncQAFUQAVYRAFUQAFYRAAEAAwABAAMAAwABAAEAAwABAAEAAQADAAEAAwABAAEAAQABAAEAAQABAAEAAQABAAEAAQBkYXRhPAUAAPLz9vn3/P3/AQ
+  IEBgcJCgsMDQ0ODQ0MDAsKCQgHBgUFBAMCAQEAAAD//v38+/r5+Pf29fTz8vHx8O/u7e3s6+vq6eno6Ofn5+fn5+fo6Onp6uvs7e7v8PHy8/T19vf4+fr7/P3+//8AAQIDBAUGBggJCQoL
+  DAwNDQ4ODg4ODQ0MDAsKCgkIBwYFBAMCAQD///79/Pv6+fj39vX08/Lx8O/u7e3s6+rq6eno5+fm5ubl5eXl5ebm5ufo6Onq6+zt7u/w8fLz9PX29/j5+vv8/f7///8BAgMEBQYHCAkKCg
+  sLDA0NDg4ODg4ODQ0MCwoKCQgHBgUEAwIBAP///v38+/r5+Pf29fTz8vHw7+7t7Ovr6uno6Ofn5ubm5eXl5eXl5ebm5+fo6Onq6+zt7u/w8fLz9PX29/j5+vv8/f3+/wABAgMEBQYHCAkJ
+  CgoLDAwNDQ0ODg4ODQwMCwsKCQgIBwYFBAMCAQEAAP/+/fz7+vn49/b19PPy8fDv7u3s7Ovq6eno5+fm5uXl5eXk5OXl5ebm5+jn6Onq6+zt7u/w8fLz9PX29/j5+vv7/P3+//8AAQIDBA
+  UGBwgICQoKCwsMDA0NDQ0NDQ0MDAsLCgkJCAgHBgUEAwMCAQD//v79/Pv6+fj39vX08/Ly8fDv7u3t7Ovq6eno5+fm5uXl5OTk5OTk5eXl5ufn6Ojp6uvs7e7v8PHx8vP09fb3+Pn6+/v8
+  /f7+/wABAgMDBAUGBwcICQoKCwsMDAwNDQ0NDQ0MDAwLCwoKCQgIBwcGBQQEAwIBAQD//v79/Pv6+fj39vb18/Py8fDv7u7t7Ovr6uno6Ofm5uXl5OTj4+Pk5OTl5ebm5+fo6erq6+zt7e
+  7v8PHx8vP09fb2+Pn5+vv8/f3+/v8AAQECAwQEBQYHBwgJCQoKCwsMDAwMDQ0NDAwMDAsLCgoJCQgHBwYFBAQDAgEBAP//CF9JUyAnVU5BTUUgLWEn");
+          beep.play();
+
+          // Fechar scanner
+          closeScanner();
+
+          // Buscar produto pelo código de barras
+          document.getElementById('product-search').value = code;
+          searchProductByBarcode(code);
+      });
+  }
+
+  // Buscar produto pelo código de barras
+  function searchProductByBarcode(barcode) {
+      // Mostrar feedback visual
+      const searchInput = document.getElementById('product-search');
+      searchInput.classList.add('barcode-scanned');
+
+      // Usar a API para buscar o produto
+      searchProducts(barcode)
+          .then(response => {
+              if (response.success && response.products && response.products.length > 0) {
+                  // Pegar o primeiro produto que corresponde ao código de barras
+                  const product = response.products.find(p => p.codigo_barras === barcode) || response.products[0];
+
+                  // Adicionar o produto ao carrinho automaticamente
+                  addToCart(product);
+
+                  // Limpar a busca depois de um momento
+                  setTimeout(() => {
+                      searchInput.value = '';
+                      searchInput.classList.remove('barcode-scanned');
+                  }, 1500);
+              } else {
+                  // Produto não encontrado
+                  searchInput.classList.add('barcode-not-found');
+                  alert('Produto não encontrado para o código: ' + barcode);
+
+                  setTimeout(() => {
+                      searchInput.classList.remove('barcode-scanned');
+                      searchInput.classList.remove('barcode-not-found');
+                  }, 1500);
+              }
+          })
+          .catch(error => {
+              console.error('Erro ao buscar produto:', error);
+              searchInput.classList.remove('barcode-scanned');
+          });
+  }
+
+  // Abrir scanner
+  function openScanner() {
+      const scannerContainer = document.getElementById('scanner-container');
+      scannerContainer.style.display = 'block';
+      initBarcodeScanner();
+  }
+
+  // Fechar scanner
+  function closeScanner() {
+      Quagga.stop();
+      const scannerContainer = document.getElementById('scanner-container');
+      scannerContainer.style.display = 'none';
+  }
+
+  // Inicializar quando o documento estiver pronto
+  document.addEventListener('DOMContentLoaded', function() {
+      // Botão para abrir scanner
+      const scannerBtn = document.getElementById('barcode-scanner-btn');
+      if (scannerBtn) {
+          scannerBtn.addEventListener('click', openScanner);
+      }
+
+      // Botão para fechar scanner
+      const closeBtn = document.getElementById('close-scanner');
+      if (closeBtn) {
+          closeBtn.addEventListener('click', closeScanner);
+      }
+
+      // Também podemos detectar códigos de barras do input de busca
+      const searchInput = document.getElementById('product-search');
+      if (searchInput) {
+          searchInput.addEventListener('keypress', function(e) {
+              // Se pressionar Enter e o valor tiver pelo menos 8 caracteres (possível código de barras)
+              if (e.key === 'Enter' && this.value.length >= 8) {
+                  searchProductByBarcode(this.value);
+              }
+          });
+      }
+  });
+
+  Agora vamos adicionar alguns estilos específicos para o scanner de código de barras no arquivo css/style.css:
+
+  /* Estilos para o scanner de código de barras */
+  #scanner-container {
+      position: relative;
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto 20px;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+  }
+
+  #interactive.viewport {
+      width: 100%;
+      height: 0;
+      padding-bottom: 75%; /* Proporção 4:3 */
+      position: relative;
+  }
+
+  #interactive.viewport canvas,
+  #interactive.viewport video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+  }
+
+  #close-scanner {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.7);
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+  }
+
+  .barcode-scanned {
+      background-color: #d4edda !important;
+      border-color: #c3e6cb !important;
+      animation: pulse-green 1.5s;
+  }
+
+  .barcode-not-found {
+      background-color: #f8d7da !important;
+      border-color: #f5c6cb !important;
+      animation: pulse-red 1.5s;
+  }
+
+  @keyframes pulse-green {
+      0% {
+          box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+      }
+      70% {
+          box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+      }
+      100% {
+          box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+      }
+  }
+
+  @keyframes pulse-red {
+      0% {
+          box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+      }
+      70% {
+          box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+      }
+      100% {
+          box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+      }
+  }
+
+  /* Estilos específicos para tela de dashboard e PDV */
+  .dashboard-page {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: #f5f5f5;
+  }
+
+  .dashboard-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.75rem 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .dashboard-header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+
+  .dashboard-container {
+      display: flex;
+      flex: 1;
+  }
+
+  .sidebar {
+      width: 220px;
+      background-color: #34495e;
+      color: white;
+      padding-top: 20px;
+  }
+
+  .sidebar-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+  }
+
+  .sidebar-nav li {
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+  }
+
+  .sidebar-nav li:hover {
+      background-color: #2c3e50;
+  }
+
+  .sidebar-nav li.active {
+      background-color: var(--secondary-color);
+      font-weight: bold;
+  }
+
+  .sidebar-nav li i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+  }
+
+  .main-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+  }
+
+  .dashboard-view {
+      display: none;
+  }
+
+  .dashboard-view.active {
+      display: block;
+  }
+
+  .pos-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+  }
+
+  .pos-actions {
+      display: flex;
+      gap: 10px;
+  }
+
+  .pos-container {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 20px;
+      height: calc(100vh - 180px);
+  }
+
+  .products-panel, .cart-panel {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+  }
+
+  .products-list {
+      flex: 1;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 15px;
+      padding: 10px 0;
+  }
+
+  .product-item {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .product-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  .product-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+  }
+
+  .product-price {
+      color: var(--secondary-color);
+      font-weight: bold;
+  }
+
+  .product-stock {
+      font-size: 0.8rem;
+      color: #777;
+  }
+
+  .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 15px;
+  }
+
+  .cart-item {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid var(--border-color);
+  }
+
+  .empty-cart {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+  }
+
+  .btn-logout {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+  }
+
+  .btn-logout:hover {
+      text-decoration: underline;
+  }
