@@ -1,0 +1,73 @@
+ <!DOCTYPE html>
+  <html lang="pt-BR">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Login - ORION PDV</title>
+      <link rel="stylesheet" href="css/style.css">──────────────────────────────────────────────────────────────────────────────────────────────────╮
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">                                      │
+  </head>───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+  <body class="login-page">                                                                                    Context left until auto-compact: 37%
+      <div class="login-container">
+          <div class="login-header">
+              <h1>ORION PDV</h1>
+              <p>Sistema de Ponto de Venda</p>──────────────────────────────────────────────────────────────────────────────────────────────────────╯
+          </div>s                                                                                              Context left until auto-compact: 37%
+
+          <div id="error-message" class="error-message" style="display: none;"></div>
+
+          <form id="login-form" class="login-form">
+              <div class="form-group">
+                  <label for="username">Usuário:</label>
+                  <input type="text" id="username" name="username" required autofocus>
+              </div>
+
+              <div class="form-group">
+                  <label for="password">Senha:</label>
+                  <input type="password" id="password" name="password" required>
+              </div>
+
+              <button type="submit" class="btn-primary btn-large">Entrar</button>
+          </form>
+
+          <div class="login-footer">
+              <p>&copy; 2025 ORION PDV. Todos os direitos reservados.</p>
+          </div>
+      </div>
+
+      <script src="js/api.js"></script>
+      <script>
+          document.getElementById('login-form').addEventListener('submit', function(e) {
+              e.preventDefault();
+
+              const username = document.getElementById('username').value;
+              const password = document.getElementById('password').value;
+
+              // Chama a função de login da API
+              login(username, password)
+                  .then(response => {
+                      if (response.success) {
+                          // Armazena o token de autenticação
+                          localStorage.setItem('auth_token', response.token);
+                          localStorage.setItem('user_name', response.user.name);
+
+                          // Redireciona para o dashboard
+                          window.location.href = 'dashboard.html';
+                      } else {
+                          showError(response.message || 'Falha na autenticação');
+                      }
+                  })
+                  .catch(error => {
+                      showError('Erro ao conectar com o servidor');
+                      console.error(error);
+                  });
+          });
+
+          function showError(message) {
+              const errorElement = document.getElementById('error-message');
+              errorElement.textContent = message;
+              errorElement.style.display = 'block';
+          }
+      </script>
+  </body>
+  </html>
