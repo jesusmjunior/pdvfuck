@@ -1,4 +1,3 @@
-
   // URL base da API (desabilitada para simulação)
   // const API_URL = 'https://orion-pdv-api.onrender.com/api';
 
